@@ -1,0 +1,13 @@
+{% extends 'core/base.twig' %}
+
+{% block body %}
+<form action="{{ path('admin_login_check') }}" method="post">
+    {{ error }}
+    <input type="text" name="_username" value="{{ last_username }}" />
+    <input type="password" name="_password" value="" />
+    <input type="hidden" name="_target_path" value="{{ redirect_url }}" />
+
+    <input type="submit" class="btn btn-primary" />
+</form>
+
+{% endblock %}

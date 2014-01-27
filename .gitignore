@@ -1,0 +1,8 @@
+# do not ignore these:
+
+
+# but do ignore these:
+vendor/
+composer.phar
+logs/*
+app/config.php
