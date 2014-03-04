@@ -31,6 +31,7 @@ abstract class CoreController implements ControllerProviderInterface {
         $this->app = $app;
         $this->logger = $app['logger'];
         $this->session = $app['session'];
+
         return $this->getRoutes($this->getControllerFactory());
     }
 
@@ -75,6 +76,8 @@ abstract class CoreController implements ControllerProviderInterface {
     protected function getTwig() {
         // add globals
         $this->app['twig']->addGlobal('user', $this->getUser());
+        $this->app['twig']->addGlobal('userId', $this->getUserId());
+
         return $this->app['twig'];
     }
 
@@ -111,21 +114,26 @@ abstract class CoreController implements ControllerProviderInterface {
         return $this->app['db'];
     }
 
-     /**
-     * Get config which is registers in the Config Service Provider
+    /**
+     * Build urls for redirect purposes
      *
-     * @param   string       $key      the key to get
-     * @return  array
+     * @param   string $path The path to generate an url for (mount)
+     * @param   array  $params params to add to the url
+     * @param   array  $query http query
+     * @return  string
      */
-    protected function getServiceConfig($key) {
-        if (isset($this->app['_services'][$key])) {
-            return $this->app['_services'][$key];
+    protected function buildUrl($path, $params = array(), $query = array()) {
+        $url = $this->getUrl()->generate($path, $params);
+        if (!empty($query)) {
+            $url .= '?' . http_build_query($query);
         }
 
-        return false;
+        return $this->app->redirect($url);
     }
 
     /**
+     * Method to get a user
+     *
      * @return User|Null|string
      */
     protected function getUser() {
@@ -134,6 +142,35 @@ abstract class CoreController implements ControllerProviderInterface {
         }
 
         return $this->getSecurity()->getToken()->getUser();
+    }
+
+    /**
+     * Method to return the authed userId
+     *
+     * @return  int|null
+     */
+    protected function getUserId() {
+        if (!$this->isGranted('ROLE_USER')) {
+            return null;
+        }
+
+        if (is_null($this->getUser())) {
+            return null;
+        }
+
+        return (int) $this->getUser()->getId();
+    }
+
+    /**
+     * Method to check if role is granted
+     *
+     * @param   string $role The role to check
+     * @return  boolean
+     */
+    protected function isGranted($role) {
+        if (in_array($role, array('ROLE_USER', 'ROLE_ADMIN'))) {
+            return $this->app['security']->isGranted($role);
+        }
     }
 
     /**
