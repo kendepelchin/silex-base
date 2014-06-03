@@ -60,7 +60,7 @@ $app->register(new FormServiceProvider());
  *
  */
 $app->register(new MonologServiceProvider(), array(
-    'monolog.logfile' => __DIR__ . '/../logs/' . date('Y:m:d') . 'development.log',
+    // 'monolog.logfile' => __DIR__ . '/../logs/' . date('Y:m:d') . 'development.log',
     'monolog.name' => 'vinyl',
 ));
 
