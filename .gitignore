@@ -1,5 +1,6 @@
 # do not ignore these:
-
+!logs/locks
+!logs/console
 
 # but do ignore these:
 vendor/
