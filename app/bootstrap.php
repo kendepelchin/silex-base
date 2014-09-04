@@ -59,10 +59,10 @@ $app->register(new FormServiceProvider());
  * MONOLOG - For logging
  *
  */
-$app->register(new MonologServiceProvider(), array(
-    'monolog.logfile' => __DIR__ . '/../logs/' . date('Y:m:d') . 'development.log',
-    'monolog.name' => 'vinyl',
-));
+// $app->register(new MonologServiceProvider(), array(
+    // 'monolog.logfile' => __DIR__ . '/../logs/' . date('Y:m:d') . 'development.log',
+    // 'monolog.name' => 'vinyl',
+// ));
 
 /**
  * Repository Service Provider
